@@ -20,25 +20,28 @@ class UserRegisterView(View):
 	def post(self, request):
 		form = self.form_class(request.POST)
 		if form.is_valid():
+			cd = form.cleaned_data
 			random_code = random.randint(1000, 9999)
-			send_otp_code(form.cleaned_data['phone'], random_code)
-			OtpCode.objects.create(phone_number=form.cleaned_data['phone'], code=random_code)
+			send_otp_code(cd['phone'], random_code)
+			OtpCode.objects.create(phone_number=cd['phone'], code=random_code)
+			# --------------- Session ---------------  
 			request.session['user_registration_info'] = {
-				'phone_number': form.cleaned_data['phone'],
-				'email': form.cleaned_data['email'],
-				'full_name': form.cleaned_data['full_name'],
-				'password': form.cleaned_data['password'],
+				'phone_number': cd['phone'],
+				'email': cd['email'],
+				'full_name': cd['full_name'],
+				'password': cd['password'],
 			}
 			messages.success(request, 'we sent you a code', 'success')
 			return redirect('accounts:verify_code')
 		return render(request, self.template_name, {'form':form})
 
 class UserRegisterVerifyCodeView(View):
+	template_name = 'accounts/verify.html'
 	form_class = VerifyCodeForm
 
 	def get(self, request):
 		form = self.form_class
-		return render(request, 'accounts/verify.html', {'form':form})
+		return render(request, self.template_name, {'form':form})
 
 	def post(self, request):
 		user_session = request.session['user_registration_info']
