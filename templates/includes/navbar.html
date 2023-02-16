@@ -2,7 +2,13 @@
     <div class="container-fluid">
         <div class="navbar-nav">
             <a class="nav-link active" href="{% url 'products:products' %}">Home</a>
-            <a class="nav-link active" href="{% url 'accounts:user_register' %}">Register</a>
+            {% if request.user.is_authenticated %}
+                <a class="nav-link active" href="{% url 'accounts:user_logout' %}">logout</a>
+            {% else %}
+                <a class="nav-link active" href="{% url 'accounts:user_register' %}">sign up</a>
+                <a class="nav-link active" href="{% url 'accounts:user_login' %}">sign in</a>
+            {% endif %}
+
             {% if request.user.is_admin %}
                 <a class="nav-link active" href="{% url 'products:bucket' %}">admin</a>
             {% endif %}

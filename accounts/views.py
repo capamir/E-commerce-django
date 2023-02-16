@@ -81,7 +81,8 @@ class UserLoginView(View):
 			if user is not None:
 				login(request, user)
 				messages.success(request, 'you logged in successfully', 'info')
-				return redirect('home:home')
+				return redirect('products:products')
+
 			messages.error(request, 'phone or password is wrong', 'warning')
 		return render(request, self.template_name, {'form':form})
 
@@ -89,4 +90,4 @@ class UserLogoutView(LoginRequiredMixin, View):
 	def get(self, request):
 		logout(request)
 		messages.success(request, 'you logged out successfully', 'success')
-		return redirect('home:home')
+		return redirect('products:products')
