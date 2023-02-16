@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserRegistrationForm, VerifyCodeForm, UserLoginForm
-import random
-from utils import send_otp_code
-from .models import OtpCode, User
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+import random
+from utils import send_otp_code
+from .models import OtpCode, User
+from .forms import UserRegistrationForm, VerifyCodeForm, UserLoginForm
 
 class UserRegisterView(View):
 	form_class = UserRegistrationForm

@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
+# from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Product
+from utils import IsAdminUserMixing
+
 
 # Create your views here.
 class ProductView(View):
@@ -19,7 +23,7 @@ class ProductDetailView(View):
         return render(request, self.template_name, {'product': product})
 
 
-class AdminHomeView(View):
+class AdminHomeView(IsAdminUserMixing, View):
     template_name = 'products/bucket_home.html'
 
     def get(self, request):
@@ -27,12 +31,10 @@ class AdminHomeView(View):
         return render(request, self.template_name, {'objects': products})
 
 
-class AdminProductDelete(View):
+class AdminProductDelete(IsAdminUserMixing, View):
     def get(self, request, *args, **kwargs):
         product = get_object_or_404(Product, pk=kwargs['product_id'])
-        if request.user.is_admin:
-            product.delete()
-            messages.success(request, 'Product deleted successfully', 'success')
-        else:
-            messages.error(request, 'you are not authorized to delete product', 'danger')
-        return redirect('products:products')
+        product.delete()
+        messages.success(request, 'Product deleted successfully', 'success')
+        
+        return redirect('products:bucket')
