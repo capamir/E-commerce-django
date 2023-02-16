@@ -3,16 +3,26 @@ from django.views import View
 from django.contrib import messages
 # from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Product
+from .models import Product, Category
 from utils import IsAdminUserMixing
 
 
 # Create your views here.
 class ProductView(View):
     template_name = 'products/products.html'
-    def get(self, request):
-        products = Product.objects.all()
-        return render(request, self.template_name, {'products': products})
+
+    def get(self, request, category_slug=None):
+        products = Product.objects.filter(available=True)
+        categories = Category.objects.filter(is_sub=False)
+
+        if category_slug:
+            category = Category.objects.get(slug=category_slug)
+            products = products.filter(category=category)
+        context = {
+            'products': products,
+            'categories': categories,
+        }
+        return render(request, self.template_name, context)
 
 
 class ProductDetailView(View):
