@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from datetime import datetime
 
-from .forms import CartAddForm
+from .forms import CartAddForm, CouponForm
 from .cart import Cart
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Coupon
 from products.models import Product
 
 
@@ -38,9 +40,15 @@ class CartRemoveView(View):
 
 class OrderDetailView(LoginRequiredMixin, View):
     template_name = 'orders/order.html'
+    form_class = CouponForm
+
     def get(self, request, order_id):
         order = get_object_or_404(Order, pk=order_id)
-        context = {'order': order}
+
+        context = {
+            'order': order,
+            'form': self.form_class
+        }
         return render(request, self.template_name, context)
 
 
@@ -57,3 +65,37 @@ class OrderCreateView(LoginRequiredMixin, View):
             )
         cart.clear()
         return redirect('orders:order_detail', order.id)
+
+
+class OrderPayView(LoginRequiredMixin, View):
+    def get(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id)
+        messages.success(request, 'Order paid successfully.', 'success')
+        order.delete()
+        return redirect('products:products')
+
+
+class CouponApplyView(LoginRequiredMixin, View):
+    form_class = CouponForm
+
+    def post(self, request, order_id):
+        now = datetime.now()
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            try:
+                coupon = Coupon.objects.get(
+                    code=code,
+                    valid_form__lte=now,
+                    valid_to__gte=now,
+                    is_active=True
+                )
+            except Coupon.DoesNotExist:
+                messages.error(request, 'coupon does not exist', 'danger')
+                return redirect('orders:order_detail', order_id)
+
+            order = Order.objects.get(id=order_id)
+            order.discount = coupon.discount
+            order.save()
+            return redirect('orders:order_detail', order_id)
+            
