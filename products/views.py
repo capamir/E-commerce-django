@@ -5,6 +5,7 @@ from django.contrib import messages
 
 from .models import Product, Category
 from utils import IsAdminUserMixing
+from orders.forms import CartAddForm
 
 
 # Create your views here.
@@ -27,10 +28,14 @@ class ProductView(View):
 
 class ProductDetailView(View):
     template_name = 'products/product_dtail.html'
+    form_class = CartAddForm
 
     def get(self, request, *args, **kwargs):
         product = Product.objects.get(slug=kwargs['slug'])
-        return render(request, self.template_name, {'product': product})
+        form = self.form_class()
+
+        context = {'product': product, 'form': form}
+        return render(request, self.template_name, context)
 
 
 class AdminHomeView(IsAdminUserMixing, View):
