@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, OrderItem, Coupon
+from .models import Order, OrderItem, Coupon, ShippingAddress
 
 # Register your models here.
 class OrderItemInline(admin.TabularInline):
@@ -18,5 +18,11 @@ class CouponAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)
 
 
+class ShippingAddressAdmin(admin.ModelAdmin):
+    list_display = ('order', 'city', 'address', 'postalCode')
+    raw_id_fields = ('order',)
+
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Coupon, CouponAdmin)
+admin.site.register(ShippingAddress)

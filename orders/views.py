@@ -71,7 +71,6 @@ class OrderPayView(LoginRequiredMixin, View):
     def get(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
         messages.success(request, 'Order paid successfully.', 'success')
-        order.delete()
         return redirect('products:products')
 
 
