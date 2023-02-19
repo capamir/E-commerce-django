@@ -1,7 +1,8 @@
-from django.urls import path
-from . import views
-
+from django.urls import path, include
+from . import main_views
+from .api_urls import product_urls, user_urls
 
 urlpatterns = [
-    path('', views.get_routes, name='routes'),
+    path('users/', include(user_urls)),
+    path('products/', include(product_urls)),
 ]
