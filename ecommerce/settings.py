@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     
     # third party apps
     'django_celery_beat',
-    'corsheaders,'
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
 
