@@ -35,14 +35,6 @@ def get_user_profile(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-@permission_classes([IsAdminUser])
-def get_users(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
-
-
 @api_view(['POST'])
 def register_User(request):
     data = request.data
@@ -82,4 +74,55 @@ def update_user_profile(request):
     user.save()
 
     return Response(serializer.data)
-    
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_users(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_user_by_id(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        serializer = UserSerializer(user, many=False)
+
+    except:
+        message = {'detail': 'user not found'}
+        return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def update_user(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        data = request.data
+        
+        user.email = data['email']
+        user.phone_number = data['phone_number']
+        user.full_name = data['full_name']
+        user.is_admin = data['is_admin']
+        user.save()
+
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data)
+        
+    except:
+        message = {'detail': 'user not found'}
+        return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, user_id):
+    user_for_deletion = User.objects.filter(id=user_id)
+    if user_for_deletion.exists():
+        user_for_deletion.delete()
+        return Response('user deleted successfully')
+    else:
+        message = {'detail': 'user not found'}
+        return Response(message, status=status.HTTP_404_NOT_FOUND)
