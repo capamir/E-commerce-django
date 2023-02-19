@@ -97,3 +97,9 @@ def update_order_to_paid(request, order_id):
         message = {'detail': 'order not found'}
         return Response(message, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def get_orders(request):
+    orders = Order.objects.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
