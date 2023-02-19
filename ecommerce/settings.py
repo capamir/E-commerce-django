@@ -196,3 +196,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Google account
+EMAIL_BACKEND = 'dango.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'amir5831212gmail.com'
+EMAIL_POST = 587
+EMAIL_HOST_PASSWORD = 'dihwytjpujgsmbwg'
+EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = ''

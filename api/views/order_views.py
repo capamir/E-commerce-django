@@ -52,3 +52,48 @@ def add_order_items(request):
         
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_my_orders(request):
+    user = request.user
+    orders = user.order_set.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_order_by_id(request, order_id):
+    user = request.user
+
+    try:
+        order = Order.objects.get(id=order_id)
+        if request.user.is_admin or user == order.user:
+            serializer = OrderSerializer(order, many=False)
+            return Response(serializer.data)
+        else:
+            message = {'detail': 'Not authorized to view this order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        message = {'detail': 'order not found'}
+        return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def update_order_to_paid(request, order_id):
+    user = request.user
+
+    try:
+        order = Order.objects.get(id=order_id)
+        if request.user.is_admin or user == order.user:
+            order.paid = True
+            order.save()
+            return Response('order was paid')
+        else:
+            message = {'detail': 'Not authorized to view this order'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        message = {'detail': 'order not found'}
+        return Response(message, status=status.HTTP_404_NOT_FOUND)
+
