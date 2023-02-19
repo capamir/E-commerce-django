@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 
-from products.models import Product, Category
+from products.models import Product, Category, Review
 from api.serializers import ProductSerializer
 
 @api_view(['GET'])
@@ -89,3 +89,7 @@ def upload_product_image(request):
     except:
         message = {'derail': 'Product not found'}
         return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def 
