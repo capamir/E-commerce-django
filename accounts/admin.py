@@ -39,5 +39,4 @@ class UserAdmin(BaseUserAdmin):
 		return form
 
 
-admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)

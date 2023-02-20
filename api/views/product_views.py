@@ -29,8 +29,6 @@ def get_products(request):
 
     # page = int(page)
 
-
-
     products = Product.objects.filter(name__icontains=query)
     serializer = ProductSerializer(products, many=True)
 
