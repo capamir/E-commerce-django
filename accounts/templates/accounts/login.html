@@ -1,9 +1,46 @@
-{% extends 'base.html' %}
+{% extends 'accounts-base.html' %}
+{% load static %}
 
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Send">
-    </form>
-{% endblock %}
+
+    <div class="auth">
+
+        <div class="card">
+    
+            <div class="auth__header text-center">
+                <a href="/">
+                    <img src="{% static 'images/icon.svg' %}" alt="icon" />
+                </a>
+                <h3>Account Login</h3>
+                <p>Hello Developer, Welcome Back!</p>
+            </div>
+    
+            <form action="" method="POST" class="form auth__form">
+                {% csrf_token %}
+                <!-- Input:phone -->
+                <div class="form__field">
+                    <label for="formInput#text">phone: </label>
+                    <input class="input input--text" id="formInput#text" type="text" name="phone"
+                        placeholder="Enter your phone..." />
+                </div>
+    
+                <!-- Input:Password -->
+                <div class="form__field">
+                    <label for="formInput#password">Password: </label>
+                    <input class="input input--password" id="formInput#passowrd" type="password" name="password"
+                        placeholder="••••••••" />
+                </div>
+    
+                <div class="auth__actions">
+                    <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
+                    <a href="{% url 'accounts:reset_password' %}">Forget Password?</a>
+                </div>
+            </form>
+    
+            <div class="auth__alternative">
+                <p>Don’t have an Account?</p>
+                <a href="{% url 'accounts:user_register' %}">Sign Up</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
