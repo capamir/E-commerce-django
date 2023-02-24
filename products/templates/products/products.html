@@ -1,35 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_headers %}
-<link rel="stylesheet" href="{% static 'home/css/style.css' %}">
-{% endblock %}
-
 {% block content %}
-    <h2>Products</h2>
-    {% for category in categories %}
+        <!-- collection -->
+    <section id = "collection" class = "py-5">
+        <div class = "container">
+            <div class = "title text-center">
+                <h2 class = "position-relative d-inline-block">New Collection</h2>
+            </div>
 
-        <div class="btn-group">
-            <a href="{{ category.get_absolute_url }}" class="btn btn-danger">{{ category.name }}</a>
-            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-                {% for sub in category.scategory.all %}
-                <li><a class="dropdown-item" href="{{ sub.get_absolute_url }}">{{ sub.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
+            <div class = "row g-0">
+                <div class = "d-flex flex-wrap justify-content-center mt-5 filter-button-group">
+                    <a class = "btn m-2 text-dark active-filter-btn" href="{% url 'products:products' %}">All</a>
+                    {% for category in categories|slice:5 %}                    
+                        <a class="btn m-2 text-dark" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
 
-    {% endfor %}
-    <br/><br/>
-    
-    {% for product in products %}
-        <div class="card" style="width: 18rem; display:inline-block;">
-            <img src="{{ product.image_url }}" class="card-img-top">
-            <div class="card-body">
-                <a href="{{ product.get_absolute_url }}" class="card-title">{{ product.name }}</a>
+                <div class = "collection-list mt-4 row gx-0 gy-3">
+                    {% for product in products %}
+                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 best">
+                            <a href="{{ product.get_absolute_url }}">
+                                <div class = "collection-img position-relative">
+                                    <img src = "{{ product.image_url }}" class = "w-100">
+                                    <span class = "position-absolute bg-primary text-white d-flex align-items-center justify-content-center">sale</span>
+                                </div>
+                                <div class = "text-center">
+                                    <div class = "rating mt-3">
+                                        <span class = "text-primary"><i class = "fas fa-star"></i></span>
+                                        <span class = "text-primary"><i class = "fas fa-star"></i></span>
+                                        <span class = "text-primary"><i class = "fas fa-star"></i></span>
+                                        <span class = "text-primary"><i class = "fas fa-star"></i></span>
+                                        <span class = "text-primary"><i class = "fas fa-star"></i></span>
+                                    </div>
+                                    <p class = "text-capitalize my-1">{{ product.name }}</p>
+                                    <span class = "fw-bold">$ {{product.price}}</span>
+                                </div>
+                            </a>
+
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    {% endfor %}
-{% endblock %}
+    </section>
+    <!-- end of collection -->
+{% endblock content %}
