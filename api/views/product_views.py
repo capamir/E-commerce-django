@@ -67,20 +67,13 @@ def update_product(request, product_id):
 
     try:
         product = Product.objects.get(id=product_id)
+        serializer = ProductSerializer(instance=product, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
         
-        product.category = data['category']
-        product.name = data['name']
-        product.slug=data['slug'],
-        product.description=data['description'],
-        product.price=data['price'],
-        product.available=data['available']
-
-        product.save()
-
-        serializer = ProductSerializer(product, many=False)
         return Response(serializer.data)
     except:
-        message = {'derail': 'Product not found'}
+        message = {'detail': 'Product not found'}
         return Response(message, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['DELETE'])  

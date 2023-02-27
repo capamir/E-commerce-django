@@ -9,6 +9,7 @@ body{
     font-family: var(--sm-font);
 }
 
+
 /* button */
 .bg-primary{
     background-color: var(--pink)!important;
@@ -36,6 +37,7 @@ body{
 .navbar{
     -webkit-box-shadow: 0 3px 9px 3px rgba(0, 0, 0, 0.1);
             box-shadow: 0 3px 9px 3px rgba(0, 0, 0, 0.1);
+    
 }
 .navbar-brand img{
     width: 30px;

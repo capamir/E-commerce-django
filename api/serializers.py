@@ -11,22 +11,22 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
         
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'phone_number', 'email', 'full_name', 'is_admin']
 
-class UserSerializerWithToken:
+
+class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'phone_number', 'email', 'full_name', 'isAdmin', 'token']
+        fields = ['id', 'phone_number', 'email', 'full_name', 'is_admin', 'token']
 
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'phone_number', 'email', 'full_name', 'isAdmin']
 
 
 class CouponSerializer(serializers.ModelSerializer):
