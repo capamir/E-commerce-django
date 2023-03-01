@@ -27,7 +27,7 @@ class ProductView(View):
 
 
 class ProductDetailView(View):
-    template_name = 'products/product_dtail.html'
+    template_name = 'products/product_detail.html'
     form_class = CartAddForm
 
     def get(self, request, *args, **kwargs):

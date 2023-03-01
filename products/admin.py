@@ -3,6 +3,7 @@ from .models import Product, Category, Review
 # Register your models here.
 class CategoryAdmin(admin.ModelAdmin):
     raw_id_fields = ('sub_category',)
+    list_display = ('name', 'slug', 'is_sub')
 
 class ProductAdmin(admin.ModelAdmin):
     raw_id_fields = ['category',]

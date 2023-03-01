@@ -6,12 +6,13 @@ order_url = [
     path('create/', views.OrderCreateView.as_view(), name='order_create'),
     path('<int:order_id>/', views.OrderDetailView.as_view(), name='order_detail'),
     path('pay/<int:order_id>/', views.OrderPayView.as_view(), name='order_pay'),
-    path('apply/<int:order_id>/', views.CouponApplyView.as_view(), name='apply_coupon'),
+    path('address/<int:order_id>/', views.ShippingAddressView.as_view(), name='order_address'),
+    path('apply/<str:order_id>/', views.CouponApplyView.as_view(), name='apply_coupon'),
 ]
 
 urlpatterns = [
     path('', include(order_url)),
     path('cart/', views.CartView.as_view(), name='cart'),
-    path('cart/<int:product_id>/', views.CartAddView.as_view(), name='cart_add'),
-    path('cart/remove/<int:product_id>/', views.CartRemoveView.as_view(), name='cart_remove'),
+    path('cart/<str:product_id>/', views.CartAddView.as_view(), name='cart_add'),
+    path('cart/remove/<str:product_id>/', views.CartRemoveView.as_view(), name='cart_remove'),
 ]

@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from accounts.models import User
-
+import uuid
 
 # Create your models here.
 class Category(models.Model):
@@ -9,7 +9,9 @@ class Category(models.Model):
     is_sub = models.BooleanField(default=False)
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
-
+    id = models.UUIDField(default=uuid.uuid4, unique=True,
+                          primary_key=True, editable=False)
+    
     class Meta:
         ordering = ('name',)
         verbose_name = 'category'
@@ -33,7 +35,9 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
+    id = models.UUIDField(default=uuid.uuid4, unique=True,
+                          primary_key=True, editable=False)
+    
     def __str__(self):
         return self.name
 
@@ -60,6 +64,8 @@ class Review(models.Model):
     rating = models.IntegerField(null=True, blank=True, default=0)
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True,
+                          primary_key=True, editable=False)
 
     def __str__(self):
         return str(self.rating)

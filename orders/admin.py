@@ -21,7 +21,7 @@ class CouponAdmin(admin.ModelAdmin):
 class ShippingAddressAdmin(admin.ModelAdmin):
     list_display = ('order', 'city', 'address', 'postalCode')
     raw_id_fields = ('order',)
-
+    search_fields = ('postalCode',)
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Coupon, CouponAdmin)

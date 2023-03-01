@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import UserManager
-
+import uuid
 
 class User(AbstractBaseUser, PermissionsMixin):
 	email = models.EmailField(max_length=255, unique=True)
@@ -9,7 +9,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 	full_name = models.CharField(max_length=100)
 	is_active = models.BooleanField(default=True)
 	is_admin = models.BooleanField(default=False)
-
+	image = models.ImageField(null=True, blank=True, upload_to='products/', 
+                            default="products/default.jpg")
+	id = models.UUIDField(default=uuid.uuid4, unique=True,
+                          primary_key=True, editable=False)
+	
 	objects = UserManager()
 
 	USERNAME_FIELD = 'phone_number'

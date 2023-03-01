@@ -4,9 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from datetime import datetime
 
-from .forms import CartAddForm, CouponForm
+from .forms import CartAddForm, CouponForm, ShippingAddressForm
 from .cart import Cart
-from .models import Order, OrderItem, Coupon
+from .models import Order, OrderItem, Coupon, ShippingAddress
 from products.models import Product
 
 
@@ -24,11 +24,11 @@ class CartView(View):
 class CartAddView(View):
     def post(self, request, product_id):
         cart = Cart(request)
-        product = get_object_or_404(Product, id=product_id)
+        product = get_object_or_404(Product, pk=product_id)
         form = CartAddForm(request.POST)
         if form.is_valid():
             cart.add(product, form.cleaned_data['quantity'])
-        return redirect('orders:cart')
+        return redirect('products:products')
 
 class CartRemoveView(View):
 	def get(self, request, product_id):
@@ -66,6 +66,28 @@ class OrderCreateView(LoginRequiredMixin, View):
         cart.clear()
         return redirect('orders:order_detail', order.id)
 
+
+class ShippingAddressView(LoginRequiredMixin, View):
+    template_name = 'orders/shipping-address.html'
+    form_class = ShippingAddressForm
+
+    def get_form(self, request, *args, **kwargs):
+        form = self.form_class()
+
+        context = {'form': form}
+        return render(request, self.template_name, context)
+    
+    def post(self, request, *args, **kwargs):
+        order = get_object_or_404(Order, pk=kwargs['order_id'])
+        form = self.form_class(request.post)
+        if form.is_valid():
+            cd = form.cleaned_data
+            ShippingAddress.objects.create(
+                order=order,
+                address=cd['address'],
+                city=cd['city'],
+                postalCode=cd['postalCode']
+            )
 
 class OrderPayView(LoginRequiredMixin, View):
     def get(self, request, order_id):

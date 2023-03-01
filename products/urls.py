@@ -5,7 +5,7 @@ app_name = 'products'
 
 bucket_url = [
     path('', views.AdminHomeView.as_view(), name='bucket'),
-    path('delete/<int:product_id>/', views.AdminProductDelete.as_view(), name='delete-product-admin'),
+    path('delete/<str:product_id>/', views.AdminProductDelete.as_view(), name='delete-product-admin'),
 ]
 
 urlpatterns = [
