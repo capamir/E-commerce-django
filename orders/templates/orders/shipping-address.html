@@ -1,5 +1,6 @@
 {% extends 'accounts-base.html' %}
 
+
 {% include 'includes/navbar.html' %}
 
 {% block content %}
@@ -7,10 +8,10 @@
 <main class="formPage my-xl">
     <div class="content-box">
         <div class="formWrapper">
-            <a class="backButton" href="{% url 'account' %}"><i class="im im-angle-left"></i></a>
+            <a class="backButton" href="{% url 'orders:order_detail' order.id %}"><i class="im im-angle-left"></i></a>
             <br>
 
-            <form class="form" method="POST" enctype="multipart/form-data">
+            <form class="form" method="POST">
                 {% csrf_token %}
 
                 {% for field in form %}

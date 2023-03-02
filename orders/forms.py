@@ -14,7 +14,7 @@ class ShippingAddressForm(forms.ModelForm):
         fields = ['address', 'city', 'postalCode']
 
     def __init__(self, *args, **kwargs):
-        super(ShippingAddress, self).__init__(*args, **kwargs)
+        super(ShippingAddressForm, self).__init__(*args, **kwargs)
 
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'input'})

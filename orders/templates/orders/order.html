@@ -11,5 +11,5 @@
         <input type="submit" value="Apply">
     </form>
 
-    <a href="{% url 'orders:order_address' order.id %}" class="btn btn-primary">Pay</a>
+    <a href="{% url 'orders:order_pay' order.id  %}" class="btn btn-primary">Pay</a>
 {% endblock content %}

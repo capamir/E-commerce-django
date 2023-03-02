@@ -64,34 +64,41 @@ class OrderCreateView(LoginRequiredMixin, View):
                 quantity=item['quantity'],
             )
         cart.clear()
-        return redirect('orders:order_detail', order.id)
+        return redirect('orders:order_address', order.id)
 
 
 class ShippingAddressView(LoginRequiredMixin, View):
     template_name = 'orders/shipping-address.html'
     form_class = ShippingAddressForm
 
-    def get_form(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
+        self.order = get_object_or_404(Order, pk=kwargs['order_id'])
+
+        return super().dispatch(request, *args, **kwargs)
+    
+
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
 
-        context = {'form': form}
+        context = {'form': form, 'order': self.order}
         return render(request, self.template_name, context)
     
     def post(self, request, *args, **kwargs):
-        order = get_object_or_404(Order, pk=kwargs['order_id'])
-        form = self.form_class(request.post)
+        form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             ShippingAddress.objects.create(
-                order=order,
+                order=self.order,
                 address=cd['address'],
                 city=cd['city'],
                 postalCode=cd['postalCode']
             )
+            return redirect('orders:order_pay', self.order.id)
 
 class OrderPayView(LoginRequiredMixin, View):
     def get(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
+        order.paid = True
         messages.success(request, 'Order paid successfully.', 'success')
         return redirect('products:products')
 

@@ -115,3 +115,18 @@ class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'accounts/password_reset_complete.html'
 
 # -------------------- End Reset Password---------------------------
+
+
+class UserAccountsView(LoginRequiredMixin, View):
+	template_name = 'accounts/profile.html'
+	
+	def get(self, request):
+		user = request.user
+		user_orders = user.orders.all()
+
+		context = {
+			'profile': user,
+			'orders': user_orders
+		}
+		return render(request, self.template_name, context)
+	

@@ -1,0 +1,58 @@
+{% extends 'accounts-base.html' %}
+
+{% block content %}
+
+<main class="settingsPage profile my-md">
+    <div class="container">
+      <div class="layout">
+
+        <div class="column column--1of3">
+          <div class="card text-center">
+            <div class="card__body dev">
+              {% comment %} <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="im im-edit"></i>
+                Edit</a> {% endcomment %}
+              <img class="avatar avatar--xl dev__avatar" src="{{profile.imageURL}}" />
+              <h2 class="dev__name">{{profile.full_name}}</h2>
+              <p class="dev__title">{{profile.phone_number}}</p>
+              <p class="dev__location">{{profile.email}}</p>
+                
+              <a href="accounts:user_logout" class="btn btn--sub btn--lg">Logout</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="column column--2of3">
+          
+          <div class="settings">
+            <h3 class="settings__title">Orders</h3>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'products:products' %}"><i
+                class="im im-plus"></i> Add Order</a>
+          </div>
+  
+          <table class="settings__table">
+            {% for order in orders %}
+            <tr>
+              <td class="settings__tableInfo">
+                <h4>{{order.name}}</h4>
+                <p>
+                  {{order.id}}
+                </p>
+              </td>
+                {% if order.paid == False %}
+                <td class="settings__tableActions">
+                    <a class="tag tag--pill tag--main settings__btn" href="{% url 'orders:order_detail' order.id %}"><i
+                        class="im im-edit"></i>Pay</a>
+                        
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+          </table>
+          
+        </div>
+      </div>
+    </div>
+</main>
+  
+
+{% endblock content %}
