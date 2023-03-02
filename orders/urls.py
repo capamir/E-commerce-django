@@ -4,10 +4,10 @@ from . import views
 app_name = 'orders'
 order_url = [
     path('create/', views.OrderCreateView.as_view(), name='order_create'),
-    path('<str:order_id>/', views.OrderDetailView.as_view(), name='order_detail'),
-    path('pay/<str:order_id>/', views.OrderPayView.as_view(), name='order_pay'),
-    path('address/<str:order_id>/', views.ShippingAddressView.as_view(), name='order_address'),
-    path('apply/<str:order_id>/', views.CouponApplyView.as_view(), name='apply_coupon'),
+    path('<int:order_id>/', views.OrderDetailView.as_view(), name='order_detail'),
+    path('pay/<int:order_id>/', views.OrderPayView.as_view(), name='order_pay'),
+    path('address/<int:order_id>/', views.ShippingAddressView.as_view(), name='order_address'),
+    path('apply/<int:order_id>/', views.CouponApplyView.as_view(), name='apply_coupon'),
 ]
 
 urlpatterns = [

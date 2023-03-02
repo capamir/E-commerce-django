@@ -12,8 +12,6 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
     discount = models.IntegerField(blank=True, null=True, default=None)
 
-    id = models.UUIDField(default=uuid.uuid4, unique=True,
-                          primary_key=True, editable=False)
     
     class Meta:
         ordering = ('paid', '-updated')
@@ -34,8 +32,6 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.IntegerField()
     quantity = models.IntegerField(default=1)
-    id = models.UUIDField(default=uuid.uuid4, unique=True,
-                          primary_key=True, editable=False)
 
     def __str__(self):
         return f'{str(self.id)}'
@@ -51,8 +47,6 @@ class Coupon(models.Model):
     valid_to = models.DateTimeField()
     discount = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(90)])
     is_active = models.BooleanField(default=False)
-    id = models.UUIDField(default=uuid.uuid4, unique=True,
-                          primary_key=True, editable=False)
     
     def __str__(self):
         return self.code

@@ -47,7 +47,7 @@ class OrderDetailView(LoginRequiredMixin, View):
 
         context = {
             'order': order,
-            'form': self.form_class
+            'form': self.form_class()
         }
         return render(request, self.template_name, context)
 
@@ -93,7 +93,7 @@ class ShippingAddressView(LoginRequiredMixin, View):
                 city=cd['city'],
                 postalCode=cd['postalCode']
             )
-            return redirect('orders:order_pay', self.order.id)
+            return redirect('orders:order_detail', self.order.id)
 
 class OrderPayView(LoginRequiredMixin, View):
     def get(self, request, order_id):
