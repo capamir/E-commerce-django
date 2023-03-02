@@ -69,5 +69,18 @@ class VerifyCodeForm(forms.Form):
 class UserLoginForm(forms.Form):
     phone = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
-    
-    
+
+
+class UserProfileChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', 'full_name', 'image',)
+        labels = {
+            'full_name': 'Name',
+        }
+    def __init__(self, *args, **kwargs):
+        super(UserProfileChangeForm, self).__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'input'})
+

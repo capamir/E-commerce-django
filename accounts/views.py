@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import random
 from utils import send_otp_code
 from .models import OtpCode, User
-from .forms import UserRegistrationForm, VerifyCodeForm, UserLoginForm
+from .forms import UserRegistrationForm, VerifyCodeForm, UserLoginForm, UserProfileChangeForm
 
 class UserRegisterView(View):
 	form_class = UserRegistrationForm
@@ -117,7 +117,7 @@ class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 # -------------------- End Reset Password---------------------------
 
 
-class UserAccountsView(LoginRequiredMixin, View):
+class UserAccountView(LoginRequiredMixin, View):
 	template_name = 'accounts/profile.html'
 	
 	def get(self, request):
@@ -128,5 +128,28 @@ class UserAccountsView(LoginRequiredMixin, View):
 			'profile': user,
 			'orders': user_orders
 		}
+		return render(request, self.template_name, context)
+	
+
+class UserAccountEditView(LoginRequiredMixin, View):
+	template_name = 'accounts/edit-profile.html'
+	form_class = UserProfileChangeForm
+
+	def setup(self, request, *args, **kwargs):
+		self.profile = request.user
+		return super().setup(request, *args, **kwargs)
+	
+	def get(self, request):
+		form = self.form_class(instance=self.profile)
+
+		context = {'form': form}
+		return render(request, self.template_name, context)
+	
+	def post(self, request):
+		form = self.form_class(request.POST, request.FILES, instance=self.profile)
+		if form.is_valid():
+			form.save()
+
+		context = {'form': form}
 		return render(request, self.template_name, context)
 	
