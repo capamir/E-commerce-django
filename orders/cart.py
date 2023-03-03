@@ -19,16 +19,16 @@ class Cart:
             cart[str(product.id)]['product'] = product
 
         for item in cart.values():
-            item['total_price'] = int(item['price']) * item['quantity']
+            item['total_price'] = float(item['price']) * item['quantity']
             yield item
-    
+
     def __len__(self):
         return sum(item['quantity'] for item in self.cart.values()) 
 
     def add(self, product, quantity):
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(product.price)}
+            self.cart[product_id] = {'quantity': 0, 'price': str(product.get_product_price)}
         
         self.cart[product_id]['quantity'] += quantity
         self.save()
@@ -43,7 +43,7 @@ class Cart:
         self.session.modified = True
 
     def total_price(self):
-        return sum(int(item['price'])*item['quantity'] for item in self.cart.values())
+        return sum(float(item['price'])*item['quantity'] for item in self.cart.values())
 
     def clear(self):
         del self.session[CART_SESSION_ID]

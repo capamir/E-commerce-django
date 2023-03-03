@@ -1,4 +1,4 @@
-{% extends 'accounts-base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
@@ -9,9 +9,9 @@
         <div class="column column--1of3">
           <div class="card text-center">
             <div class="card__body dev">
-              {% comment %} <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="im im-edit"></i>
-                Edit</a> {% endcomment %}
-              <img class="avatar avatar--xl dev__avatar" src="{{profile.imageURL}}" />
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="im im-edit"></i>
+                Edit</a>
+              <img class="avatar avatar--xl dev__avatar" src="{{profile.image_url}}" />
               <h2 class="dev__name">{{profile.full_name}}</h2>
               <p class="dev__title">{{profile.phone_number}}</p>
               <p class="dev__location">{{profile.email}}</p>
@@ -51,6 +51,7 @@
           </table>
           
         </div>
+        
       </div>
     </div>
 </main>

@@ -34,9 +34,16 @@
                                         <span class = "text-primary"><i class = "fas fa-star"></i></span>
                                     </div>
                                     <p class = "text-capitalize my-1">{{ product.name }}</p>
-                                    <span class = "fw-bold">$ {{product.price}}</span>
+                                    {% if product.discount > 0 %}
+                                    <strike class = "fw-bold">$ {{product.price}}</strike>
+
+                                    {% endif %}
+                                    <span class = "fw-bold">$ {{product.get_product_price}}</span>
                                 </div>
                             </a>
+                            {% if product.discount > 0 %}
+                            <span class = "position-absolute top-0 start-100 translate-middle badge bg-primary">{{product.discount}}</span>
+                            {% endif %}
 
                         </div>
                     {% endfor %}

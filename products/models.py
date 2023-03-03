@@ -32,6 +32,7 @@ class Product(models.Model):
                             default="products/default.jpg")
     description = models.TextField()
     price = models.IntegerField()
+    discount = models.IntegerField(default=0 , null=True, blank=True)
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -56,7 +57,14 @@ class Product(models.Model):
             url = ''
         return url
 
-
+    @property
+    def get_product_price(self):
+        if self.discount > 0:
+            discounted_price = (self.discount / 100) * self.price
+            return self.price - discounted_price
+        return self.price
+    
+    
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
